@@ -4,13 +4,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 def wait_until_percent_is(driver, x):
     WebDriverWait(driver, timeout=100, poll_frequency=0.1).until(
-        EC.text_to_be_present_in_element(
-            (By.ID, "progressBar"),
-            text_=f"{x}%"
-        )
+        EC.text_to_be_present_in_element((By.ID, "progressBar"), text_=f"{x}%")
     )
+
+
 def test_progress_bar(selenium):
     get_url(selenium, urls.WIDGETS_PROGRESS_BAR)
     start_stop_button = selenium.find_element(By.ID, "startStopButton")

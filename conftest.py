@@ -7,7 +7,9 @@ from collections import namedtuple
 
 RETRIES = 3
 TIMEOUT = 5
-Person = namedtuple("Person", ["first_name", "last_name", "age", "email", "salary", "department"])
+Person = namedtuple(
+    "Person", ["first_name", "last_name", "age", "email", "salary", "department"]
+)
 
 
 def get_url(driver, url):
@@ -37,13 +39,14 @@ def table_data():
         for _ in range(size):
             results.append(
                 Person(
-                    first_name = fake.first_name(),
-                    last_name = fake.last_name(),
-                    age = random.randint(0, 100),
-                    email = fake.email(),
-                    salary = random.randint(2_500, 10_000),
-                    department = random.choice(departments),
+                    first_name=fake.first_name(),
+                    last_name=fake.last_name(),
+                    age=random.randint(0, 99),  # webtables can't handle ages over 100
+                    email=fake.email(),
+                    salary=random.randint(2_500, 10_000),
+                    department=random.choice(departments),
                 )
             )
         return results
+
     return prepare_table_data

@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.action_chains import ActionChains
 
+
 def test_practice_form(selenium):
     get_url(selenium, urls.FORMS_PRACTICE_FORM)
     name = selenium.find_element(By.ID, "firstName")
@@ -25,26 +26,31 @@ def test_practice_form(selenium):
     number = selenium.find_element(By.ID, "userNumber")
     number.send_keys("6" * 10)
 
-    datepicker_wrapper = selenium.find_element(By.CLASS_NAME, "react-datepicker-wrapper")
+    datepicker_wrapper = selenium.find_element(
+        By.CLASS_NAME, "react-datepicker-wrapper"
+    )
     datepicker_wrapper.click()
 
     WebDriverWait(selenium, 30).until(
-        EC.element_to_be_clickable(
-            (By.CLASS_NAME, "react-datepicker__month-select")
-        )
-
+        EC.element_to_be_clickable((By.CLASS_NAME, "react-datepicker__month-select"))
     )
 
-    month_select_el = selenium.find_element(By.CLASS_NAME, "react-datepicker__month-select")
+    month_select_el = selenium.find_element(
+        By.CLASS_NAME, "react-datepicker__month-select"
+    )
     month_select = Select(month_select_el)
     month_select.select_by_value("6")
-    year_select_el = selenium.find_element(By.CLASS_NAME, "react-datepicker__year-select")
+    year_select_el = selenium.find_element(
+        By.CLASS_NAME, "react-datepicker__year-select"
+    )
     year_select = Select(year_select_el)
     year_select.select_by_value("1995")
     day = selenium.find_element(By.CLASS_NAME, "react-datepicker__day--028")
     day.click()
 
-    auto_complete = selenium.find_element(By.CLASS_NAME, "subjects-auto-complete__control")
+    auto_complete = selenium.find_element(
+        By.CLASS_NAME, "subjects-auto-complete__control"
+    )
     action_chain = ActionChains(selenium)
     auto_complete.click()
     action_chain.send_keys("Computer Science")
@@ -58,7 +64,9 @@ def test_practice_form(selenium):
 
     hobby_sports = selenium.find_element(By.XPATH, '//label[@for="hobbies-checkbox-1"]')
     hobby_sports.click()
-    hobby_reading = selenium.find_element(By.XPATH, '//label[@for="hobbies-checkbox-2"]')
+    hobby_reading = selenium.find_element(
+        By.XPATH, '//label[@for="hobbies-checkbox-2"]'
+    )
     hobby_reading.click()
     hobby_music = selenium.find_element(By.XPATH, '//label[@for="hobbies-checkbox-3"]')
     hobby_music.click()
@@ -66,7 +74,7 @@ def test_practice_form(selenium):
     file_el = selenium.find_element(By.ID, "uploadPicture")
     file_el.send_keys(os.getcwd() + "/img/image.jpeg")
 
-    address_content= """\
+    address_content = """\
     House No. 123, Sector 14
     Karnal, Haryana 132001
     India"""

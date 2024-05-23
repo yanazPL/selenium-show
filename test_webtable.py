@@ -1,4 +1,3 @@
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from conftest import Person, get_url
@@ -23,13 +22,12 @@ def extract_people_from_table(driver):
                 department=cells[5].get_attribute("innerHTML"),
             )
         )
-        # print(people.pop())
     return people
 
 
 def clear_table(driver):
-    while (delete_spans := driver.find_elements(By.CSS_SELECTOR, 'span[title="Delete"]')):
-            delete_spans[0].click()
+    while delete_spans := driver.find_elements(By.CSS_SELECTOR, 'span[title="Delete"]'):
+        delete_spans[0].click()
 
 
 def fill_person_data(driver, person):
@@ -61,47 +59,58 @@ def edit_topmost_person(driver, new_person):
     edit_buttons[0].click()
     fill_person_data(driver, new_person)
 
+
 def add_people_to_table(driver, people):
     add_button = driver.find_element(By.ID, "addNewRecordButton")
     for person in people:
         add_button.click()
-        fill_person_data(driver, person) 
-  
+        fill_person_data(driver, person)
+
 
 def page_jump(driver, page_nr):
-    page_input = driver.find_element(By.CSS_SELECTOR, '.-pageJump input')
+    page_input = driver.find_element(By.CSS_SELECTOR, ".-pageJump input")
     page_input.clear()
     page_input.send_keys(str(page_nr))
 
-# def scroll_to_element(driver, element):
-#     original_x, original_y = driver.get_window_position()["x"], driver.get_window_position()["y"] 
-#     x_offset, y_offset = int(element.rect["x"] - float(original_x)), int(element.rect["y"] - float(original_y))
+
 def change_rows(driver, count):
-    change_rows_el = driver.find_element(By.CSS_SELECTOR, 'select[aria-label="rows per page"')
-    original_x, original_y = driver.get_window_position()["x"], driver.get_window_position()["y"] 
-    x_offset, y_offset = int(change_rows_el.rect["x"] - float(original_x)), int(change_rows_el.rect["y"] - float(original_y))
+    change_rows_el = driver.find_element(
+        By.CSS_SELECTOR, 'select[aria-label="rows per page"'
+    )
+    original_x, original_y = (
+        driver.get_window_position()["x"],
+        driver.get_window_position()["y"],
+    )
+    x_offset, y_offset = (
+        int(change_rows_el.rect["x"] - float(original_x)),
+        int(change_rows_el.rect["y"] - float(original_y)),
+    )
     ActionChains(driver).scroll_by_amount(x_offset, y_offset).perform()
-    # selenium.execute_script("arguments[0].scrollIntoView();", change_rows_el)
     select = Select(change_rows_el)
     select.select_by_value(str(count))
     add_button = driver.find_element(By.ID, "addNewRecordButton")
     driver.execute_script("arguments[0].scrollIntoView();", add_button)
 
+
 def next_table_page(driver):
     button = driver.find_element(By.CSS_SELECTOR, ".-next button")
     assert button.is_displayed()
+
 
 def previous_table_page(driver):
     button = driver.find_element(By.CSS_SELECTOR, ".-previous button")
     assert button.is_displayed()
 
+
 def search_table(driver, string):
     searchbox = driver.find_element(By.ID, "searchBox")
     searchbox.send_keys(string)
 
+
 def clear_searchbox(driver):
     searchbox = driver.find_element(By.ID, "searchBox")
     searchbox.clear()
+
 
 def order_records(driver, header, order="asc"):
     # selenium.get(urls.ELEMENTS_WEBTABLES)
@@ -116,9 +125,7 @@ def order_records(driver, header, order="asc"):
         if "-sort-desc" not in header_el.get_attribute("class"):
             content_el.click()
 
-    # selenium.get()
-    # -cursor-pointer -sort-asc
-    
+
 def test_webtables_clear(selenium):
     # selenium.get(urls.ELEMENTS_WEBTABLES)
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
@@ -127,24 +134,36 @@ def test_webtables_clear(selenium):
     for td in table_data_list:
         children = td.find_elements(By.CSS_SELECTOR, "*")
         assert len(children) == 1
-        assert children[0].tag_name == "span" and children[0].get_attribute("innerHTML") == '&nbsp;'
+        assert (
+            children[0].tag_name == "span"
+            and children[0].get_attribute("innerHTML") == "&nbsp;"
+        )
         assert not extract_people_from_table(selenium)
+
+
 def test_table_data_fixture(table_data):
     people = table_data(3)
     for person in people:
         assert isinstance(person, Person)
 
+
 def test_table_add_one(selenium):
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
     clear_table(selenium)
     data = [
-        Person(first_name="Jan", last_name="Kowalski", age=30, email="jan.kowalski@abc.pl", salary=6500, department="IT")
+        Person(
+            first_name="Jan",
+            last_name="Kowalski",
+            age=30,
+            email="jan.kowalski@abc.pl",
+            salary=6500,
+            department="IT",
+        )
     ]
     add_people_to_table(selenium, data)
     result = extract_people_from_table(selenium)
     assert result.pop() == data[0]
 
-#test_box_positive test_elements_buttons_double_click test_radio_no_button
 
 def test_table_add_ten(selenium, table_data):
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
@@ -155,13 +174,20 @@ def test_table_add_ten(selenium, table_data):
     assert len(result) == 10
     assert result == data
 
+
 def test_edit_topmost(selenium, table_data):
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
     clear_table(selenium)
     initial_person = table_data(1)
     add_people_to_table(selenium, initial_person)
-    new_person = Person("Adam", "Żuk", age=25, email="adam.zuk@zuky.net", salary=250000, department="CEO")
-    # time.sleep(10)
+    new_person = Person(
+        "Adam",
+        "Żuk",
+        age=25,
+        email="adam.zuk@zuky.net",
+        salary=250000,
+        department="CEO",
+    )
     edit_topmost_person(selenium, new_person)
     people = extract_people_from_table(selenium)
     assert people[0] == new_person
@@ -178,9 +204,30 @@ def test_order_table(selenium):
     change_rows(selenium, 5)
     clear_table(selenium)
     people = [
-        Person("Adam", "Żuk", age=25, email="adam.zuk@zuky.net", salary=250000, department="CEO"),
-        Person("Anna", "Kowalska", age=30, email="anna.kowalska@example.com", salary=5000, department="Compliance"),
-        Person("Michał", "Nowak", age=40, email="michal.nowak@example.com", salary=35000, department="Legal"),
+        Person(
+            "Adam",
+            "Żuk",
+            age=25,
+            email="adam.zuk@zuky.net",
+            salary=250000,
+            department="CEO",
+        ),
+        Person(
+            "Anna",
+            "Kowalska",
+            age=30,
+            email="anna.kowalska@example.com",
+            salary=5000,
+            department="Compliance",
+        ),
+        Person(
+            "Michał",
+            "Nowak",
+            age=40,
+            email="michal.nowak@example.com",
+            salary=35000,
+            department="Legal",
+        ),
     ]
     add_people_to_table(selenium, people)
     order_records(selenium, "First Name", order="asc")
@@ -196,7 +243,6 @@ def test_order_table(selenium):
     assert people_by_first_name_desc[0].first_name == "Michał"
     assert people_by_first_name_desc[1].first_name == "Anna"
     assert people_by_first_name_desc[2].first_name == "Adam"
-    
 
     order_records(selenium, "Last Name", order="asc")
     people_by_last_name_asc = extract_people_from_table(selenium)
@@ -236,7 +282,7 @@ def test_order_table(selenium):
 
     order_records(selenium, "Salary", order="asc")
     people_by_salary_asc = extract_people_from_table(selenium)
-    assert people_by_salary_asc[0].salary == 5000 # BUG -> here
+    assert people_by_salary_asc[0].salary == 5000  # BUG -> here
     assert people_by_salary_asc[1].salary == 35000
     assert people_by_salary_asc[2].salary == 250000
 
@@ -261,15 +307,33 @@ def test_order_table(selenium):
 
 def test_search_table(selenium):
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
-    # close_button = selenium.find_elements(By.ID, "cbb")
-    # if close_button:
-    #     close_button[0].click()
     change_rows(selenium, 5)
     clear_table(selenium)
     people = [
-        Person("Adam", "Żuk", age=25, email="adam.zuk@zuky.net", salary=50000, department="Compliance"),
-        Person("Adam", "Kowalski", age=30, email="adam.kowalski@example.com", salary=5000, department="Compliance"),
-        Person("Michał", "Żuk", age=25, email="michal.zuk@example.com", salary=35000, department="Legal"),
+        Person(
+            "Adam",
+            "Żuk",
+            age=25,
+            email="adam.zuk@zuky.net",
+            salary=50000,
+            department="Compliance",
+        ),
+        Person(
+            "Adam",
+            "Kowalski",
+            age=30,
+            email="adam.kowalski@example.com",
+            salary=5000,
+            department="Compliance",
+        ),
+        Person(
+            "Michał",
+            "Żuk",
+            age=25,
+            email="michal.zuk@example.com",
+            salary=35000,
+            department="Legal",
+        ),
     ]
     add_people_to_table(selenium, people)
     search_table(selenium, "Adam")

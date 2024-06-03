@@ -10,4 +10,7 @@ ELEMENTS_WEBTABLES = "https://demoqa.com/webtables"
 ELEMENTS_DYNAMIC_PROPERTIES = "https://demoqa.com/dynamic-properties"
 FORMS_PRACTICE_FORM = "https://demoqa.com/automation-practice-form"
 WIDGETS_PROGRESS_BAR = "https://demoqa.com/progress-bar"
+WIDGETS_ACCORDIAN = 'https://demoqa.com/accordian'
+WIDGET_AUTO_COMPLETE = 'https://demoqa.com/auto-complete'
+WIDGETS_DATE_PICKER = 'https://demoqa.com/date-picker'
 DOWNLOAD_FILE = "/home/jan/Pobrane/sampleFile.jpeg"

@@ -113,7 +113,6 @@ def clear_searchbox(driver):
 
 
 def order_records(driver, header, order="asc"):
-    # selenium.get(urls.ELEMENTS_WEBTABLES)
     content_xpath = f'//div[@class="rt-resizable-header-content" and text()="{header}"]'
     content_el = driver.find_element(By.XPATH, content_xpath)
     header_xpath = f"{content_xpath}/.."
@@ -127,7 +126,6 @@ def order_records(driver, header, order="asc"):
 
 
 def test_webtables_clear(selenium):
-    # selenium.get(urls.ELEMENTS_WEBTABLES)
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
     clear_table(selenium)
     table_data_list = selenium.find_elements(By.CLASS_NAME, "rt-td")
@@ -195,8 +193,6 @@ def test_edit_topmost(selenium, table_data):
 
 def test_order_table(selenium):
     """Test doesn't pass, because there is actual salary order bug"""
-
-    # selenium.get(urls.ELEMENTS_WEBTABLES)
     get_url(selenium, urls.ELEMENTS_WEBTABLES)
     close_fixedban = selenium.find_elements(By.ID, "close-fixedban")
     if close_fixedban:

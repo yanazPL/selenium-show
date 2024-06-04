@@ -4,6 +4,7 @@
 
 This project is designed to test various components of a web application using Python. The project is structured to test different elements such as checkboxes, forms, web tables, and widgets. It also includes configurations and URL management for testing purposes.
 
+Project is in progress. The URL of site being tested is https://demoqa.com/
 ## File Structure
 
 - `conftest.py`: Configuration and fixture setup for the tests.

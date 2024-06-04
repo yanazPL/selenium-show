@@ -24,11 +24,11 @@ This project is designed to test various components of a web application using P
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-repository-url.git
+    git clone https://github.com/yanazPL/selenium-show.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd project-directory
+    cd selenium-show
     ```
 3. Install the required dependencies:
     ```sh
@@ -39,13 +39,13 @@ This project is designed to test various components of a web application using P
 
 To run the tests, simply execute:
 ```sh
-pytest
+pytest --driver [Firefox|Chrome|Edge|Safari]
 ```
 
 This will run all the tests in the project. You can also run specific test files by specifying their names:
 ```sh
-pytest test_checkbox.py
-pytest test_form.py
+pytest test_checkbox.py --driver [Firefox|Chrome|Edge|Safari]
+pytest test_form.py --driver [Firefox|Chrome|Edge|Safari]
 ```
 
 ## Configuration
